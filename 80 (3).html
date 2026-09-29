@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ja" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情報モラル＆セキュリティ 総合模試 80問</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans JP', 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-full text-slate-800 flex flex-col min-h-screen bg-slate-50">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+                        <i class="fa-solid fa-shield-halved text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-900 leading-tight">情報モラル・セキュリティ</h1>
+                        <p class="text-xs text-slate-500 font-medium">全80問 総合理解度チェックテスト</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold text-blue-600 bg-blue-50 flex items-center transition">
+                        <i class="fa-solid fa-house mr-2"></i> ホーム
+                    </button>
+                    <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center transition">
+                        <i class="fa-solid fa-pen-to-square mr-2"></i> 問題に挑戦
+                    </button>
+                    <button onclick="switchTab('list')" id="nav-list" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center transition">
+                        <i class="fa-solid fa-list-check mr-2"></i> 問題一覧
+                    </button>
+                    <button onclick="switchTab('analytics')" id="nav-analytics" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center transition">
+                        <i class="fa-solid fa-chart-pie mr-2"></i> 成績カルテ
+                    </button>
+                </nav>
+
+                <!-- Quick Stats Badge -->
+                <div class="hidden sm:flex items-center space-x-3 text-xs bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+                    <div class="flex items-center text-slate-600">
+                        <i class="fa-solid fa-check-circle text-emerald-500 mr-1.5 text-sm"></i>
+                        <span>解答数: <strong id="header-answered" class="text-slate-800">0</strong>/80</span>
+                    </div>
+                    <span class="text-slate-300">|</span>
+                    <div class="flex items-center text-slate-600">
+                        <i class="fa-solid fa-bookmark text-amber-500 mr-1.5 text-sm"></i>
+                        <span>保存: <strong id="header-bookmarked" class="text-slate-800">0</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Bottom Bar -->
+        <div class="md:hidden flex border-t border-slate-200 bg-white justify-around py-2">
+            <button onclick="switchTab('home')" id="mobile-nav-home" class="flex flex-col items-center text-xs font-semibold text-blue-600">
+                <i class="fa-solid fa-house text-lg mb-0.5"></i>ホーム
+            </button>
+            <button onclick="switchTab('quiz')" id="mobile-nav-quiz" class="flex flex-col items-center text-xs font-medium text-slate-500">
+                <i class="fa-solid fa-pen-to-square text-lg mb-0.5"></i>演習
+            </button>
+            <button onclick="switchTab('list')" id="mobile-nav-list" class="flex flex-col items-center text-xs font-medium text-slate-500">
+                <i class="fa-solid fa-list-check text-lg mb-0.5"></i>一覧
+            </button>
+            <button onclick="switchTab('analytics')" id="mobile-nav-analytics" class="flex flex-col items-center text-xs font-medium text-slate-500">
+                <i class="fa-solid fa-chart-pie text-lg mb-0.5"></i>成績
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <section id="tab-home" class="space-y-6">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-900 rounded-2xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-white pointer-events-none">
+                    <i class="fa-solid fa-lock text-[280px]"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-400/30 mb-4">
+                        <i class="fa-solid fa-sparkles mr-1.5"></i>全80問題完全網羅版
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">
+                        情報セキュリティ・モラルの知識を完全マスター
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+                        SNS利用マナー、ネットショッピング、ウイルス対策、著作権からセキュリティ技術まで。全80問の実戦形式テストで確実な知識を身につけましょう。
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="startQuizMode('single')" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center">
+                            <i class="fa-solid fa-play mr-2"></i>1問ずつ解く（標準）
+                        </button>
+                        <button onclick="startQuizMode('all')" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-xl border border-white/20 backdrop-blur transition flex items-center">
+                            <i class="fa-solid fa-list mr-2"></i>全問題一覧で解く
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Modes Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between" onclick="startQuizMode('single')">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-repeat"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">1問スライドモード</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                            カード形式で1問ずつ集中して解くモード。即時解答チェックと解説表示でスムーズに学習を進められます。
+                        </p>
+                    </div>
+                    <span class="text-blue-600 text-sm font-semibold flex items-center">
+                        学習を開始する <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </span>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between" onclick="startQuizMode('all')">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">全問一括モード</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                            試験本番のように1画面で全80問を見渡しながら解答。いつでもまとめて採点＆結果出力が可能です。
+                        </p>
+                    </div>
+                    <span class="text-emerald-600 text-sm font-semibold flex items-center">
+                        一括テストに挑戦 <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </span>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between" onclick="switchTab('list')">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-filter"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">ピンポイント復習</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                            「保存した問題」「未解答問題」だけをフィルタリングして効率的に集中復習が行えます。
+                        </p>
+                    </div>
+                    <span class="text-purple-600 text-sm font-semibold flex items-center">
+                        問題リストを見る <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Categories Overview -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center">
+                    <i class="fa-solid fa-cubes text-blue-600 mr-2"></i> 出題カテゴリ・学習範囲
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-medium">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                        <i class="fa-solid fa-mobile-screen text-blue-500 text-lg mb-1"></i>
+                        <span class="font-bold text-slate-700">スマホ・マナー</span>
+                        <span class="text-slate-400 mt-0.5">問01 - 問10</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                        <i class="fa-solid fa-network-wired text-indigo-500 text-lg mb-1"></i>
+                        <span class="font-bold text-slate-700">ネット・メール</span>
+                        <span class="text-slate-400 mt-0.5">問11 - 問20</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                        <i class="fa-solid fa-cart-shopping text-emerald-500 text-lg mb-1"></i>
+                        <span class="font-bold text-slate-700">EC・権利・法律</span>
+                        <span class="text-slate-400 mt-0.5">問21 - 問35</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                        <i class="fa-solid fa-lock text-rose-500 text-lg mb-1"></i>
+                        <span class="font-bold text-slate-700">セキュリティ・技術</span>
+                        <span class="text-slate-400 mt-0.5">問36 - 問80</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-quiz" class="hidden space-y-6">
+            <!-- Control Header for Quiz -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <span id="quiz-mode-badge" class="px-3 py-1 bg-blue-100 text-blue-700 font-bold text-xs rounded-full">1問スライドモード</span>
+                    <span class="text-slate-400 text-sm">|</span>
+                    <span class="text-sm font-semibold text-slate-700">進捗: <span id="current-index-display">1</span> / <span id="total-quiz-count">80</span></span>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="w-full sm:w-64 bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="quiz-progress-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 1.25%"></div>
+                </div>
+
+                <!-- Display Style Switcher -->
+                <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                    <button onclick="setQuizViewMode('single')" id="view-mode-single-btn" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white transition">1問ずつ</button>
+                    <button onclick="setQuizViewMode('all')" id="view-mode-all-btn" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">全問一括</button>
+                </div>
+            </div>
+
+            <!-- Single Question Container -->
+            <div id="single-question-view" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <!-- Question Card Header -->
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <span id="q-category" class="inline-block px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-md mb-2">カテゴリ</span>
+                        <h3 id="q-title" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug">01. 問題文</h3>
+                    </div>
+                    <button id="q-bookmark-btn" onclick="toggleBookmarkCurrent()" class="text-slate-300 hover:text-amber-500 transition text-xl p-2">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </button>
+                </div>
+
+                <!-- Options -->
+                <div id="q-options-container" class="space-y-3 mb-8">
+                    <!-- Dynamic rendering of options -->
+                </div>
+
+                <!-- Explanation Area (Initially Hidden) -->
+                <div id="q-explanation" class="hidden mb-8 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <h4 class="text-sm font-bold text-slate-900 mb-1 flex items-center">
+                        <i class="fa-solid fa-circle-info text-blue-500 mr-2"></i> 解説・アドバイス
+                    </h4>
+                    <p id="q-explanation-text" class="text-sm text-slate-600 leading-relaxed"></p>
+                </div>
+
+                <!-- Footer Navigation Buttons -->
+                <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                    <button onclick="navigateQuiz(-1)" id="prev-q-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-xl transition flex items-center disabled:opacity-50">
+                        <i class="fa-solid fa-chevron-left mr-2 text-xs"></i> 前へ
+                    </button>
+                    <button onclick="navigateQuiz(1)" id="next-q-btn" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-xl shadow-md shadow-blue-500/20 transition flex items-center">
+                        次へ <i class="fa-solid fa-chevron-right ml-2 text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- All Questions List View (Hidden by default) -->
+            <div id="all-questions-view" class="hidden space-y-6">
+                <div id="all-questions-container" class="space-y-6">
+                    <!-- Dynamic list rendering -->
+                </div>
+                <div class="text-center pt-4">
+                    <button onclick="finishQuiz()" class="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base rounded-xl shadow-lg shadow-emerald-600/30 transition">
+                        解答を終了して総合結果を見る
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-list" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">問題一覧・絞り込み</h3>
+                        <p class="text-xs text-slate-500">全80問の状態管理と個別チェックが可能です</p>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterQuestionList('all')" id="filter-all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white">すべて (80)</button>
+                        <button onclick="filterQuestionList('unanswered')" id="filter-unanswered" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">未解答</button>
+                        <button onclick="filterQuestionList('bookmarked')" id="filter-bookmarked" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">ブックマーク</button>
+                    </div>
+                </div>
+
+                <!-- Grid View of Questions -->
+                <div id="question-grid-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Cards dynamically populated -->
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-analytics" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center">
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-50 text-blue-600 text-3xl font-extrabold mb-4">
+                    <span id="result-rank-badge">S</span>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-1">理解度診断レポート</h2>
+                <p class="text-slate-500 text-sm mb-6">現在の回答状況とスコア分析</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <span class="text-xs font-bold text-slate-400 block mb-1">スコア</span>
+                        <span class="text-3xl font-extrabold text-blue-600" id="stat-score">0</span>
+                        <span class="text-xs text-slate-500">/ 80問</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <span class="text-xs font-bold text-slate-400 block mb-1">正答率</span>
+                        <span class="text-3xl font-extrabold text-emerald-600" id="stat-accuracy">0%</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <span class="text-xs font-bold text-slate-400 block mb-1">解答完了率</span>
+                        <span class="text-3xl font-extrabold text-purple-600" id="stat-progress">0%</span>
+                    </div>
+                </div>
+
+                <div class="text-left max-w-2xl mx-auto">
+                    <h3 class="text-sm font-bold text-slate-900 mb-3"><i class="fa-solid fa-list-check text-blue-500 mr-2"></i>解答の振り返り</h3>
+                    <div id="analytics-summary-list" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar p-1">
+                        <!-- Summary items -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // DATA BANK FOR ALL 80 QUESTIONS
+        const quizData = [
+            { id: 1, cat: "スマホ・機器", q: "01. 携帯電話やスマートフォンの電池がなくなってきた場合の対応として、最も不適切なものを一つ選びなさい。", options: ["ア. 自分が持っているモバイルバッテリーで充電する。", "イ. お店で使用しているコンセントで充電する。", "ウ. 携帯電話やスマートフォンの画面の明るさを下げる。", "エ. 携帯電話やスマートフォンの電源を切る。"], ans: 1, exp: "お店のコンセントを許可なく勝手に使用して充電する行為は「電気窃盗（盗電）」となり、犯罪に問われる可能性があります。" },
+            { id: 2, cat: "モラル・マナー", q: "02. カメラ撮影時のマナーとして、問題がないと思われる行為を一つ選びなさい。", options: ["ア. 自分の友人を許可なく撮影した。", "イ. 街の風景を許可なく撮影した。", "ウ. 美術館の展示作品をフラッシュ撮影した。", "エ. 書店で販売されている雑誌の記事を撮影した。"], ans: 1, exp: "街の風景の撮影は基本的に問題ありません。友人の無断撮影は肖像権、フラッシュ撮影は展示保護、雑誌の撮影は「デジタル万引き」となり不適切です。" },
+            { id: 3, cat: "SNS利用", q: "03. SNSの説明として、最も不適切なものを一つ選びなさい。", options: ["ア. 正式名称は「ソーシャルネットワーキングサービス」である。", "イ. 登録した利用者だけに参加できる。", "ウ. 個人だけでなく、公的機関が設置したSNSもある。", "エ. メッセージはすべての人から受けつけることができる。"], ans: 3, exp: "多くのSNSではブロック機能や非公開設定があり、特定の相手からのメッセージ受信を拒否・制限できるようになっています。" },
+            { id: 4, cat: "災害・防犯", q: "04. 災害時における連絡手段について、最も不適切なものを一つ選びなさい。", options: ["ア. 安否情報を確認するために、災害用伝言板を利用する。", "イ. 情報が不足しているため、ソーシャルメディア上の情報はすべて転送する。", "ウ. 電話はつながりにくいため、電子メールを利用する。", "エ. 特定の相手に自分の現在地を伝えるために、GPS機能を利用する。"], ans: 1, exp: "ソーシャルメディア上には災害時デマや不確実な情報が拡散しやすいため、内容を確認せずすべて転送・拡散することは非常に危険です。" },
+            { id: 5, cat: "ネットモラル", q: "05. あるサイトを炎上させてしまった場合の対応として、最も不適切なものを一つ選びなさい。", options: ["ア. 批判した相手に反論する。", "イ. 情報の補足や修正を行う。", "ウ. 批判や指摘に対して感謝を示す。", "エ. 炎上に対するお詫びを述べろ。"], ans: 0, exp: "炎上に対して感情的に反論すると火に油を注ぐことになり、被害や炎上がさらに拡大します。事実確認と迅速な不備修正・謝罪が基本です。" },
+            { id: 6, cat: "ネットモラル", q: "06. インターネット上における発言のルールについて、最も不適切なものを一つ選びなさい。", options: ["ア. 個人情報は書き込まない。", "イ. 自分がされていやなことは書き込まない。", "ウ. 自分の思いは素直に書き込む。", "エ. 他人の悪口は書き込まない。"], ans: 2, exp: "「自分の思いは素直に書き込む」と言っても、他人を不快にさせたり攻撃したりする内容を無遠慮に書き込むのはモラル違反です。" },
+            { id: 7, cat: "通信・アプリ", q: "07. 無料通話アプリの特徴として、最も適切なものを一つ選びなさい。", options: ["ア. 通話料金が無料になっている。", "イ. パケット料金が無料になっている。", "ウ. インターネット回線の基本使用料が無料になっている。", "エ. 電話回線の基本使用料が無料になっている。"], ans: 0, exp: "無料通話アプリはインターネット回線を利用して音声データをやり取りするため、電話回線の通話料は無料ですが、パケット通信料は発生します。" },
+            { id: 8, cat: "アプリ利用", q: "08. コミュニケーションアプリの利用について、最も適切なものを一つ選びなさい。", options: ["ア. 「非公開」のグループトークにしていれば、個人情報を書き込んでもよい。", "イ. 友達から金銭にかかわる要求があった場合、電話などで本人に確認したほうがよい。", "ウ. IDとパスワードは、利用するサービスすべてに同じものを使用したほうがよい。", "エ. アプリやサービスを登録するさい、プライバシーポリシーを読んでおく必要はない。"], ans: 1, exp: "アカウント乗っ取りの被害に遭った友人から金銭要求のメッセージが来る詐欺が多発しているため、別の手段（電話など）で本人確認するのが適切です。" },
+            { id: 9, cat: "セキュリティ", q: "09. 迷惑メールが届く理由として、最も不適切なものを一つ選びなさい。", options: ["ア. 特殊なプログラムが、Webページ上のメールアドレスを自動的に収集しているから。", "イ. 手当たりしだいにメールアドレスを作成しているから。", "ウ. 懸賞サイトなどにメールアドレスを登録したから。", "エ. メールアドレスを突然変更したから。"], ans: 3, exp: "メールアドレスを複雑なものに変更することは迷惑メール対策として有効であり、変更したことが直接の届く理由にはなりません。" },
+            { id: 10, cat: "セキュリティ", q: "10. 次の中から、迷惑メールでないものを一つ選びなさい。", options: ["ア. チェーンメール", "イ. スパムメール", "ウ. メールマガジン", "エ. ウイルスメール"], ans: 2, exp: "利用者が自ら希望・登録して受信する「メールマガジン」は迷惑メールには当たりません。" },
+            { id: 11, cat: "情報リテラシー", q: "11. 情報の信ぴょう性を判断する基準として、最も不適切なものを一つ選びなさい。", options: ["ア. 情報の発信元を確かめる。", "イ. 情報の更新日を確かめる。", "ウ. 検索結果の表示順位を確かめる。", "エ. ほかの情報メディアで確かめる。"], ans: 2, exp: "検索エンジンの表示順位が高いからといって、その情報が正しいとは限りません（SEO対策やアクセス数によるため）。" },
+            { id: 12, cat: "検索エンジン", q: "12. 検索エンジンの特徴として、最も不適切なものを一つ選びなさい。", options: ["ア. 検索結果の表示順位は、ユーザが意図的にかえることはできない。", "イ. 検索キーワードに応じて、Webページの情報が順番に表示される。", "ウ. 検索結果の表示順位は、検索エンジンが独自で決めている。", "エ. インターネット上に公開されているWebページ情報を収集している。"], ans: 0, exp: "検索の設定（日付順、関連度順など）や検索フィルタを使用することで、表示順位や絞り込みをユーザが意図的に調整可能です。" },
+            { id: 13, cat: "通信技術", q: "13. 電子メールの特徴について、最も不適切なものを一つ選びなさい。", options: ["ア. 相手に届くまでの時間は決まっていない。", "イ. 送信したとしても送信者に戻ってくる場合がある。", "ウ. 受信メールサーバの容量を超えると送信できない場合がある。", "エ. 送信側と受信側を直接つないでメッセージのやり取りをしている。"], ans: 3, exp: "電子メールは送信者と受信者が直接通信するのではなく、メールサーバ（SMTP/POP/IMAP）を経由してバケツリレー式にバッファ配信されます。" },
+            { id: 14, cat: "健康・依存", q: "14. テクノ依存症の特徴について、最も不適切なものを一つ選びなさい。", options: ["ア. 情報機器の利用に没頭してしまう。", "イ. 情報機器がないと不安に感じてしまう。", "ウ. 情報機器の利用にストレスを感じてしまう。", "エ. 人づきあいをわずらわしいと感じてしまう。"], ans: 2, exp: "「情報機器の利用にストレスを感じてしまう」のは「テクノストレス症候群（テクノ不安症）」の特徴であり、依存症は離れられなくなる症状です。" },
+            { id: 15, cat: "通信技術", q: "15. 電子メールの特徴として、最も不適切なものを一つ選びなさい。", options: ["ア. 自分の好きな時間にメールの送信ができる。", "イ. メールの着信があれば、すぐに返信する必要がある。", "ウ. 間接的なコミュニケーション手段であるため、送信者の意図が伝わらない可能性がある。", "エ. 文字以外に画像などの添付ファイルを送信することができる。"], ans: 1, exp: "電子メールは非同期型の通信手段であるため、着信後即座に返信する必要はありません（状況や内容に応じて適切に対応）。" },
+            { id: 16, cat: "通信技術", q: "16. 電子メールを複数の人に送信するさい、Cさんへ送信したことを、AさんとBさんには知らせないようにするためには、メールアドレスを入力する欄の組み合わせをどのようにすればよいか、最も適切なものを一つ選びなさい。", options: ["ア. 宛先：Aさん・Bさん、CC：Cさん", "イ. 宛先：Cさん、CC：Bさん、BCC：Aさん", "ウ. CC：Cさん、BCC：Aさん・Bさん", "エ. 宛先：Aさん、CC：Bさん、BCC：Cさん"], ans: 3, exp: "BCC（Blind Carbon Copy）に入力されたアドレスは、他の受信者（宛先やCC）からは見えません。CさんをBCCに入れるのが正解です。" },
+            { id: 17, cat: "GPS・位置情報", q: "17. GPS機能について、最も不適切なものを一つ選びなさい。", options: ["ア. 所有する機器のGPS機能の有効・無効の設定は、必要に応じて確認して使い分ける。", "イ. 必要のないときは、GPS機能は無効にしておくほうがよい。", "ウ. スマートフォンのGPS機能を無効にしていれば、ダウンロードしたアプリのGPS機能設定はとくに確認しなくてもよい。", "エ. SNSを利用するときは、位置情報の公開に関する設定を確認して利用するほうがよい。"], ans: 2, exp: "アプリごとに個別の位置情報アクセス権限があるため、アプリ個別の設定も必ず確認・管理する必要があります。" },
+            { id: 18, cat: "クラウド", q: "18. クラウドコンピューティングのサービスに当てはまらないサービスを一つ選びなさい。", options: ["ア. ストレージ", "イ. 郵便", "ウ. 電話", "エ. スケジュール管理"], ans: 1, exp: "物理的な物流サービスである「郵便」はクラウドコンピューティングによるデジタル提供サービスには含まれません。" },
+            { id: 19, cat: "通信技術", q: "19. リアルタイム配信や生放送に最も適しているシステムを一つ選びなさい。", options: ["ア. ストリーミング", "イ. 動画共有サイト", "ウ. ファイル共有ソフト", "エ. クラウドコンピューティング"], ans: 0, exp: "ダウンロード完了を待たずに再生を並行して行う「ストリーミング技術」が、リアルタイム配信や生放送に最適です。" },
+            { id: 20, cat: "消費者保護", q: "20. クーリングオフで契約を取り消すさいの注意点として、最も不適切なものを一つ選びなさい。", options: ["ア. クーリングオフができるのは商品購入後の一定期間内である。", "イ. 必ず書面や電磁的記録で契約取り消しの意思を伝える必要がある。", "ウ. ネットショッピングにはクーリングオフは適用されない。", "エ. クーリングオフは相手の合意が必要である。"], ans: 3, exp: "クーリングオフは消費者の無条件解除権であるため、事業者の合意は不要です。（※ネット通販は原則対象外な点も重要）" },
+            { id: 21, cat: "EC・ビジネス", q: "21. 電子商取引（EC）における「B to C（Business to Consumer）」型に当てはまらない取引形態を一つ選びなさい。", options: ["ア. ネットショッピング", "イ. オンラインゲーム", "ウ. オンライントレード", "エ. ネットオークション"], ans: 3, exp: "個人間取引（C to C）が主体となる「ネットオークション」はB to C（企業対個人）の代表例ではありません。" },
+            { id: 22, cat: "EC・ビジネス", q: "22. ネットオークションの注意点として、最も不適切なものを一つ選びなさい。", options: ["ア. 出品者に対する評価をチェックする。", "イ. 落札した場合、出品者の指示どおりに動かなければならない。", "ウ. 急激な価格の高騰があった場合には、入札を慎重にする。", "エ. 同じ出品者IDのオークションにたくさんの不自然な入札の経歴がないか確認する。"], ans: 1, exp: "出品者が不当な支払い方法や口座を指定してきた場合、指示通りに従う必要はなく、プラットフォーム規定に沿って厳重に対応します。" },
+            { id: 23, cat: "ネットモラル", q: "23. 無料ゲームを利用するさいに注意すべき内容について、最も不適切なものを一つ選びなさい。", options: ["ア. どこまでが無料なのかを確認してから利用する。", "イ. アイテムの購入など、金銭取引はしない。", "ウ. グループで楽しむゲームは自分が抜けると仲間に迷惑がかかるので、少額なら支払うほうが無難である。", "エ. 親しい友人や家族であっても、ID、パスワードは、貸し借りをしない。"], ans: 2, exp: "「仲間に迷惑がかかるから支払う」というのは不適切であり、未成年や不要な課金事故につながるため毅然と断るべきです。" },
+            { id: 24, cat: "防犯・詐欺", q: "24. 架空請求への対応について、最も不適切なものを一つ選びなさい。", options: ["ア. 架空請求をした業者に確認の電話を入れる。", "イ. そのサイトを利用した覚えがあるか、本人が確認する。", "ウ. お金を振り込む前に、家族などに相談する。", "エ. あわてないで、冷静になる。"], ans: 0, exp: "業者に直接電話やメールをすると、電話番号などの個人情報が相手に知られ、さらなる請求や不当なつきまといの原因になります。" },
+            { id: 25, cat: "防犯・詐欺", q: "25. 実在の銀行やクレジットカード会社をよそおい、偽のWebサイトにIDやパスワード、カード番号などを入力させて、その情報を悪用する詐欺のことを何というか、最も適切なものを一つ選びなさい。", options: ["ア. ワンクリック詐欺", "イ. マルチ商法", "ウ. キーロガー", "エ. フィッシング詐欺"], ans: 3, exp: "偽のサイトへ誘導して認証情報を盗み取る手口を「フィッシング詐欺」と呼びます。" },
+            { id: 26, cat: "セキュリティ", q: "26. 情報のやり取りの安全性を証明する「電子証明書」において、証明書の確認画面に載っていない項目はどれか、最も適切なものを一つ選びなさい。", options: ["ア. 証明書発行者の所在地", "イ. 証明書の発行者", "ウ. 証明書の有効期間", "エ. 証明書の発行先"], ans: 0, exp: "電子証明書には発行先、発行者（CA）、有効期限、公開鍵などが記載されますが、発行者の詳細な物理的「所在地」は載っていません。" },
+            { id: 27, cat: "個人情報", q: "27. 個人情報の中で、基本四情報に含まれないものを一つ選びなさい。", options: ["ア. 性別", "イ. 銀行の口座番号", "ウ. 生年月日", "エ. 住所"], ans: 1, exp: "基本四情報とは「氏名・生年月日・性別・住所」の4つを指します。" },
+            { id: 28, cat: "個人情報・法律", q: "28. 個人情報保護法において、個人情報の対象にならないものを一つ選びなさい。", options: ["ア. メールアドレス", "イ. クラスの住所録", "ウ. 卒業アルバム", "エ. 亡くなった人の情報"], ans: 3, exp: "日本の個人情報保護法において、対象となるのは「生存する個人に関する情報」であり、死者の情報は対象外です。" },
+            { id: 29, cat: "個人情報・権利", q: "29. 忘れられる権利に関連する内容について、最も適切なものを一つ選びなさい。", options: ["ア. 廃棄された紙ゴミからIDやパスワードを入手する。", "イ. スマートフォンを廃棄するときデータを消去する。", "ウ. 個人の不都合な情報を検索結果から削除する。", "エ. CDやDVDをシュレッダーにかけて裁断し、データを読めなくする。"], ans: 2, exp: "「忘れられる権利（削除権）」とは、インターネット上の検索結果やサイトから自分の不都合・古い過去の個人情報を削除要求できる権利です。" },
+            { id: 30, cat: "個人情報・法律", q: "30. 個人情報保護法において個人情報取扱事業者に求めていることの中で、最も不適切なものを一つ選びなさい。", options: ["ア. 個人データを集めること", "イ. 個人データの安全管理", "ウ. 第三者への提供制限", "エ. 保有個人データの開示・訂正"], ans: 0, exp: "「個人データを無暗に集めること」は義務ではありません。利用目的の特定と適切な安全管理・開示・第三者提供制限が求められます。" },
+            { id: 31, cat: "個人情報・法律", q: "31. 個人情報保護法を守らなければならない事業者は、何名以上の個人データを6か月以上扱う者か、最も適切なものを一つ選びなさい。", options: ["ア. 1001名", "イ. 5001名", "ウ. 10001名", "エ. 人数の条件はない"], ans: 3, exp: "改正個人情報保護法（2017年施行）により「5000人以下」の小規模事業者の除外規定が撤廃され、現在は件数に関わらず「人数の条件はない」となっています。" },
+            { id: 32, cat: "モラル・著作権", q: "32. 情報の管理や発信として、最も不適切なものを一つ選びなさい。", options: ["ア. 個人が持っている知識や情報を外部に発信する。", "イ. 他人の質問に対して親身になって答える。", "ウ. 提供される情報の価値を自分自身で判断する。", "エ. 外部からの情報を自分の作品にそのまま使用する。"], ans: 3, exp: "他人の情報を許可なくそのまま自分の作品として盗用・剽窃する行為は著作権侵害およびモラル違反です。" },
+            { id: 33, cat: "著作権", q: "33. 著作権についての説明として、最も不適切なものを一つ選びなさい。", options: ["ア. 著作権は、届け出なくても自動的に与えられる。", "イ. 著作者は、発表するかしないかを自由に決めることができる。", "ウ. 著作物が自分のものであることを示すために、著作者は名前を明らかにしなければならない。", "エ. 著作物の内容を他人が勝手にかえることはできない。"], ans: 2, exp: "著作権法（無方式主義）では、名前を表示しなくても作品を作った時点で権利が発生します（氏名不表示・無名・変名も自由です）。" },
+            { id: 34, cat: "著作権", q: "34. 小説の著作権の保護期間として、最も適切なものを一つ選びなさい。", options: ["ア. 著作者が死亡するまで", "イ. 著作者が死亡してから30年", "ウ. 著作者が死亡してから70年", "エ. 永久"], ans: 2, exp: "現在の日本の著作権法における原則保護期間は、著作者の「死後70年」です。" },
+            { id: 35, cat: "著作権", q: "35. 映画の著作権の保護期間として、最も適切なものを一つ選びなさい。", options: ["ア. 映画を公表してから30年", "イ. 映画を公表してから50年", "ウ. 映画を公表してから70年", "エ. 永久"], ans: 2, exp: "映画の著作権の保護期間は、「公表後70年」（または創作後70年）と規定されています。" },
+            { id: 36, cat: "著作権・法律", q: "36. 著作権を侵害した場合の著作権法による罰則規定として、最も適切なものを一つ選びなさい。", options: ["ア. 1年以下の懲役もしくは100万円以下の罰金または両方", "イ. 3年以下の懲役もしくは300万円以下の罰金または両方", "ウ. 5年以下の懲役もしくは500万円以下の罰金または両方", "エ. 10年以下の懲役もしくは1000万円以下の罰金または両方"], ans: 3, exp: "個人による著作者人格権・著作権等の侵害に対する罰則の最高刑は「10年以下の懲役もしくは1000万円以下の罰金（またはその併科）」です。" },
+            { id: 37, cat: "著作権", q: "37. 著作者人格権について述べたものについて、最も不適切なものを一つ選びなさい。", options: ["ア. 著作物は、変名では公表できない。", "イ. 著作物をいつ公表するかを決められる。", "ウ. 著作物の内容を勝手に改変されない。", "エ. プログラムの不具合を修正する。"], ans: 0, exp: "著作者人格権の「氏名表示権」により、本名だけでなく「ペンネーム（変名）」や無名で公表することも自由に選べます。" },
+            { id: 38, cat: "著作権", q: "38. 次の中から、音楽についての著作隣接権を持っていない者を一つ選びなさい。", options: ["ア. 実演家", "イ. 作詞家", "ウ. レコード制作者", "エ. 放送事業者"], ans: 1, exp: "作詞家や作曲家は著作権（著作者）の保有者です。「著作隣接権」を持つのは伝達者である実演家、レコード制作者、放送事業者等です。" },
+            { id: 39, cat: "スマホ・識別", q: "39. 携帯電話に個別に付与されている番号のことを何というか、最も適切なものを一つ選びなさい。", options: ["ア. ユーザID", "イ. アカウント", "ウ. SIM", "エ. 個体識別番号"], ans: 3, exp: "携帯電話端末一台一台に付与されている一意の識別番号を「個体識別番号（IMEI等）」と呼びます。" },
+            { id: 40, cat: "セキュリティ技術", q: "40. 次の中から、バイオメトリクス認証でないものを一つ選びなさい。", options: ["ア. 指紋認証", "イ. ICカード認証", "ウ. 虹彩認証", "エ. 静脈認証"], ans: 1, exp: "指紋・虹彩・静脈などは身体的特徴を利用する生体（バイオメトリクス）認証ですが、ICカードは所持物認証です。" },
+            { id: 41, cat: "不正アクセス", q: "41. 不正アクセスに関する説明として、最も不適切なものを一つ選びなさい。", options: ["ア. 不正に入手したユーザIDとパスワードで、アクセス制限されたサイトに入る。", "イ. 適当に入力したユーザIDとパスワードで、アクセス制限されたサイトに入る。", "ウ. 不正アクセスを防ぐために、わかりやすいパスワードに変更する。", "エ. 不正アクセスを防ぐために、一定期間ごとにパスワードを変更する。"], ans: 2, exp: "推測されやすい単純なパスワードに変更することは攻撃を容易にするため、極めて危険です。" },
+            { id: 42, cat: "不正アクセス", q: "42. 不正アクセスの対策として、最も不適切なものを一つ選びなさい。", options: ["ア. 他人にユーザIDやパスワードを教えない。", "イ. コンピュータプログラムの最新の修正情報を適用する。", "ウ. ウイルス対策ソフトウェアを使用する。", "エ. 複雑にしているパスワードはそのまま使用する。"], ans: 3, exp: "複雑なパスワードを設定していても、定期的な見直しや漏洩リスクへの配慮、定期的な更新が推奨されます（または二要素認証の併用）。" },
+            { id: 43, cat: "不正アクセス・法律", q: "43. 不正アクセス行為をすると「不正アクセス行為の禁止等に関する法律（不正アクセス禁止法）」ではどのような罰則になるか、最も適切なものを一つ選びなさい。", options: ["ア. 1年以下の懲役または50万円以下の罰金", "イ. 2年以下の懲役または100万円以下の罰金", "ウ. 3年以下の懲役または100万円以下の罰金", "エ. 5年以下の懲役または1000万円以下の罰金"], ans: 2, exp: "不正アクセス行為を行った者に対する罰則は「3年以下の懲役または100万円以下の罰金」と定められています。" },
+            { id: 44, cat: "暗号化技術", q: "44. AさんとBさんは公開鍵をネット上で公開している。BさんからAさんへ安全にデータを送るときの方法として、最も適切なものを一つ選びなさい。", options: ["ア. BさんはAさんの公開鍵で暗号化してAさんに送信し、Aさんは自分の秘密鍵で復号する。", "イ. BさんはAさんの公開鍵で暗号化してAさんに送信し、Aさんは自分の公開鍵で復号する。", "ウ. BさんはAさんの公開鍵で暗号化してAさんに送信し、AさんはBさんの秘密鍵で復号する。", "エ. BさんはAさんの公開鍵で暗号化してAさんに送信し、AさんはBさんの公開鍵で復号する。"], ans: 0, exp: "公開鍵暗号方式では、受信者（Aさん）の「公開鍵」で暗号化し、受取人本人のみしか持たない「秘密鍵」で復号します。" },
+            { id: 45, cat: "暗号化技術", q: "45. 古代ローマのシーザーに使ったとされるシーザー暗号は、文字を任意の文字数分後ろへずらして暗号化している共通鍵方式である。angouの5文字をシーザー暗号化するとどのようになるか、最も適切なものを一つ選びなさい。（※3文字ずらす場合）", options: ["ア. cpiqw", "イ. cpjqx", "ウ. dpjqx", "エ. dqjrx"], ans: 3, exp: "アルファベットを3文字後ろにずらします。a->d, n->q, g->j, o->r, u->x となるため「dqjrx」が正解です。" },
+            { id: 46, cat: "フィルタリング", q: "46. Webページに対して、一定基準で格づけを行うことを何というか、最も適切なものを一つ選びなさい。", options: ["ア. レイティング", "イ. ソート", "ウ. フィルタリング", "エ. ランキング"], ans: 0, exp: "Webサイトのコンテンツ表現などを一定基準で格付け・評価することを「レイティング」と呼びます。" },
+            { id: 47, cat: "フィルタリング", q: "47. 健全で有益と思われるWebサイトのリストをつくり、そのリストに該当するWebサイトしか見せないフィルタリング方式を何というか、最も適切なものを一つ選びなさい。", options: ["ア. セーフリスト方式", "イ. ホワイトリスト方式", "ウ. OKリスト方式", "エ. ブラックリスト方式"], ans: 1, exp: "安全と確認された閲覧許可リストのみアクセスを許可する方式を「ホワイトリスト方式」と呼びます。" },
+            { id: 48, cat: "スマホ・セキュリティ", q: "48. スマートフォンを使うときに気をつける方法として、最も不適切なものを一つ選びなさい。", options: ["ア. ウイルス対策ソフトウェアをつねにアップデートし、最新のパターンファイルにしておく。", "イ. システムやアプリをつねにアップデートし、最新の状態を保つ。", "ウ. アプリをインストールするさいは、公式サイトから入手する。", "エ. Wi-Fiを使うときは、携帯電話会社のフィルタリングを設定しておく。"], ans: 3, exp: "携帯電話会社のフィルタリングは主にモバイル回線（4G/5G）通信に適用され、Wi-Fi接続時は回避されることがあるため注意が必要です。" },
+            { id: 49, cat: "マルウェア・ウイルス", q: "49. コンピュータウイルスについての記述で最も適切なものを一つ選びなさい。", options: ["ア. ExcelやWordのデータにはウイルスは含まれない。", "イ. ウイルス対策ソフトウェアは新しいウイルスも駆除できる。", "ウ. ウイルスは実行されなければ感染しない。", "エ. Webサイトを見ただけではウイルス感染しない。"], ans: 2, exp: "ウイルスは実行ファイルやマクロが「実行」されて初めて動作・感染します（※プログラムが起動していない非実行状態では発動しません）。" },
+            { id: 50, cat: "記録メディア", q: "50. USBメモリに関する記述として、最も不適切なものを一つ選びなさい。", options: ["ア. WordやExcelなどのデータは、暗号化してUSBメモリに保存できる。", "イ. パスワードを入力しないと使えないUSBメモリがある。", "ウ. USBメモリは接続すると、どのコンピュータでも使える。", "エ. 本人の指紋を入力しないと使えないUSBメモリがある。"], ans: 2, exp: "セキュリティ保護（暗号化や特定の認証ドライバが必要）されたUSBメモリは、権限のないコンピュータでは使用できません。" },
+            { id: 51, cat: "マナー・電波", q: "51. 電車・バスの優先席付近で携帯電話やスマートフォンの電源を切らなければならない理由として、最も不適切なものを一つ選びなさい。", options: ["ア. 携帯電話は、電源を切らない限り、電波を出し続けているから。", "イ. 精密機器の機能を狂わせるおそれがあるから。", "ウ. 心臓のペースメーカーを装着している人の身体に影響をおよぼすおそれがあるから。", "エ. 携帯電話の電池の消費量が増えるから。"], ans: 3, exp: "優先席付近で電源を切るルールは医療機器（ペースメーカー）への影響防止が目的であり、電池消費は無関係です。" },
+            { id: 52, cat: "SNS・プライバシー", q: "52. ソーシャルメディアに掲載しても差しつかえない情報として、最も適切なものを一つ選びなさい。", options: ["ア. 自分の住所", "イ. 自分の意見", "ウ. 友人の作品", "エ. 友人の顔写真"], ans: 1, exp: "他人の権利（著作権・肖像権）や自他の個人情報を侵害しない「自分の意見」の発信は差し支えありません。" },
+            { id: 53, cat: "ネットコミュニケーション", q: "53. ネット上のコミュニケーションの特徴として、最も不適切なものを一つ選びなさい。", options: ["ア. いつでもメッセージを送ることができる。", "イ. 同じメッセージをたくさんの人に送ることができる。", "ウ. 送り手が他人のふりをすることができる。", "エ. 送り手のメッセージを正確に受け取ることができる。"], ans: 3, exp: "文字だけのやり取りでは表情や声のトーンが伝わらず、送信者の意図を「正確に受け取る」ことが困難で誤解が生じやすい特徴があります。" },
+            { id: 54, cat: "通信・アプリ", q: "54. コミュニケーションアプリの特徴として、最も不適切なものを一つ選びなさい。", options: ["ア. インターネット回線を使って通話している。", "イ. 相手の回線状況によっては通話できない場合がある。", "ウ. アプリ使用料が無料である。", "エ. データ通信料が無料である。"], ans: 3, exp: "アプリ自体のダウンロード・使用料が無料であっても、データ送受信に伴うパケット「データ通信料」は発生します。" },
+            { id: 55, cat: "迷惑メール", q: "55. 迷惑メールの特徴として、最も不適切なものを一つ選びなさい。", options: ["ア. 不特定多数への転送をうながす内容が載っている。", "イ. 加入プロバイダからの連絡が載っている。", "ウ. Webサイトへのリンクが載っている。", "エ. 身に覚えのない料金の請求が載っている。"], ans: 1, exp: "契約しているプロバイダからの公式な重要なお知らせや連絡は、迷惑メールの一般的な特徴には当てはまりません。" },
+            { id: 56, cat: "情報リテラシー", q: "56. 選択した情報の信ぴょう性を確認する方法として、最も不適切なものを一つ選びなさい。", options: ["ア. 友人から得たタレント情報を芸能週刊誌で確認する。", "イ. ネットで得た情報をその分野の専門誌で確認する。", "ウ. テレビのニュースで得た情報を新聞で確認する。", "エ. Wikipediaで得た学術情報を図書館の本で確認する。"], ans: 0, exp: "うわさ話や芸能週刊誌の情報は信頼性が低く、正確な信ぴょう性の確認手段としては不適切です。" },
+            { id: 57, cat: "ネット依存", q: "57. ネット依存の特徴について、最も不適切なものを一つ選びなさい。", options: ["ア. 携帯電話の電波が圏外になるとイライラする。", "イ. 使用時間の感覚をなくしてしまう。", "ウ. 情報機器を扱うのが苦手なので、使用を避けてしまう。", "エ. 使用時間を増やすために、家事や勉強をおろそかにする。"], ans: 2, exp: "「機器の利用を避ける」のは依存症とは対極の行動パターンです。" },
+            { id: 58, cat: "権利・法律", q: "58. 違反行為にあたらないものを一つ選びなさい。", options: ["ア. 有名人の写真を撮影し、自分の部屋に飾った。", "イ. 有名人の写真を撮影し、自分のブログに掲載した。", "ウ. 有名人の似顔絵を描き、ネットオークションに出品した。", "エ. 観光地の線路内で友人と記念撮影してSNSに投稿した。"], ans: 0, exp: "個人が私的使用の範囲内で写真を自室に飾る行為は、パブリシティ権や著作権侵害にはあたりません。" },
+            { id: 59, cat: "プライバシー・GPS", q: "59. スマートフォンのGPS機能をオンにすると最も危険なケースを一つ選びなさい。", options: ["ア. 友達との待ち合わせのとき", "イ. 自分の家の中で、画像を撮影するとき", "ウ. 目的地への行き方を調べるとき", "エ. 観光地で写真を撮影するとき"], ans: 1, exp: "自宅内で撮影した写真にExif位置情報が付与されたままSNS等へ投稿すると、自宅の特定につながり大変危険です。" },
+            { id: 60, cat: "クラウド・セキュリティ", q: "60. クラウドサービスの活用例として、とくに注意が必要なものを一つ選びなさい。", options: ["ア. 自分の作品", "イ. 個人情報的な写真", "ウ. 電話帳", "エ. スケジュール"], ans: 2, exp: "他人の電話番号やアドレスが含まれる「電話帳」データを不適切な権限でクラウド上に保管・共有すると個人情報漏洩の原因になります。" },
+            { id: 61, cat: "著作権", q: "61. 動画共有サイトへの投稿として差しつかえないものを一つ選びなさい。", options: ["ア. 料理レシピ", "イ. TVドラマ", "ウ. 人気アニメ", "エ. アーティストのライブ"], ans: 0, exp: "TVドラマやアニメ、ライブ映像は著作権侵害となります。オリジナルの料理レシピ動画などの投稿は問題ありません。" },
+            { id: 62, cat: "ネットショッピング", q: "62. ネットショッピングの被害対策として、最も不適切なものを一つ選びなさい。", options: ["ア. コミュニケーションアプリの登録設定を確認し、自分の利用状況にあった設定にしておく。", "イ. 代金は商品が到着してから振り込む方法がとれるかどうか確認する。", "ウ. 申し込み時のパソコンの画面表示をデータとして保存しておく。", "エ. トラブルなくいつも利用しているサイトでは、IDやパスワードを変更するとかえって信用をなくすので変更しない。"], ans: 3, exp: "普段利用しているサイトであっても定期的なパスワードの変更や使い回しの防止がセキュリティ上必要です。" },
+            { id: 63, cat: "ネットオークション", q: "63. ネットオークションを利用する場合に確認できる事項として、最も不適切なものを一つ選びなさい。", options: ["ア. 出品者のメールアドレスのみが確認できる。", "イ. 商品が到着してから代金を振り込む方法が確認できる。", "ウ. 出品者の実績がサイトで確認できる。", "エ. 出品者の連絡先の固定電話番号、住所が確認できる。"], ans: 0, exp: "出品者情報はメールアドレスのみならず、特定商取引法に基づく表記や取引画面で住所・電話番号等も確認されるべきです。" },
+            { id: 64, cat: "ゲーム・課金", q: "64. ゲーム課金の被害対策として、最も不適切なものを一つ選びなさい。", options: ["ア. 支払い方法には、クレジット決済を選ばない。", "イ. ゲームを利用する前に、利用規約などを十分確認しておく。", "ウ. アプリが無料であれば、安心してアイテム購入できる。", "エ. 友達とゲームを一緒に楽しむ場合でも、アカウントは共有しない。"], ans: 2, exp: "アプリ本体のダウンロードが無料であっても、ゲーム内アイテムの購入には高額な課金が発生する場合があります。" },
+            { id: 65, cat: "セキュリティ", q: "65. ワンクリック詐欺に遭わないようにするためにとる行動として、最も不適切なものを一つ選びなさい。", options: ["ア. 同意をしていない請求のメールは無視する。", "イ. パソコンやスマートフォンの基本ソフトウェア（OS）を最新のものにアップデートする。", "ウ. 便利なアプリは、権限を確認する必要がない。", "エ. 間違ってリンクをクリックしないようにする。"], ans: 2, exp: "便利そうに見えるアプリでも不必要な権限（カメラ、連絡先など）を要求して盗聴・盗撮する悪意あるアプリがあるため権限確認は必須です。" },
+            { id: 66, cat: "セキュリティ", q: "66. オンライン詐欺に遭わないための対策として、最も不適切なものを一つ選びなさい。", options: ["ア. 勧誘のメールや電話に対応する。", "イ. 正式なアプリストアからのみダウンロードする。", "ウ. メールに表示されているURLは安易にクリックしない。", "エ. 大手銀行のサイトでもhttpsから始まるURLかどうか確認する。"], ans: 0, exp: "見知らぬ相手からの不審な勧誘メールや電話に応答・反応すると相手にカモとして認識され、詐欺被害が拡大します。" },
+            { id: 67, cat: "SNS・プライバシー", q: "67. SNSに写真を掲載したとき、最も危険性が低いものを一つ選びなさい。", options: ["ア. 自分と友達が一緒に写った写真", "イ. 友達だけが写った写真", "ウ. 家族の写真", "エ. 風景や動物などの写真"], ans: 3, exp: "人物が写っていない背景・動物等の写真は、肖像権や個人のプライバシー侵害のリスクが最も低いです。" },
+            { id: 68, cat: "スマホ・盗難対策", q: "68. スマートフォンを落としたときの対策として、最も不適切なものを一つ選びなさい。", options: ["ア. 登録されているデータが見られないように、パスワードなどのセキュリティをかけておく。", "イ. 遠隔操作で、電話番号などの登録されているデータを消去できるようにしておく。", "ウ. 落としたとわかった時点ですぐに携帯電話会社などに連絡を取り、使用停止の措置をとる。", "エ. パスワードをかけてあり、誰にも中身を見られないので、誰かが届けてくれるのを待つ。"], ans: 3, exp: "パスワードをかけていても、不正利用やSIMカードの差し替え悪用リスクがあるため、判明した時点ですぐに使用停止手続をとるべきです。" },
+            { id: 69, cat: "個人情報・権利", q: "69. 自分の個人情報が間違って登録されているとわかったときに不適切な行動を一つ選びなさい。", options: ["ア. そのうち正しいものに訂正されるだろうから、そのままにしておく。", "イ. 開示請求をして、どのような情報が登録されているか確かめる。", "ウ. 訂正の請求をして、正しい情報に置き換える。", "エ. 利用停止の請求をして、間違った情報が使われないようにする。"], ans: 0, exp: "誤った情報放置はトラブル（誤請求やなりすましなど）を招くため、放置せず自分で速やかに訂正請求や確認を行う必要があります。" },
+            { id: 70, cat: "モラル・レポート", q: "70. レポートの書き方として、最も適切なものを一つ選びなさい。", options: ["ア. 他人の意見と自分の意見を区別せずに記述した。", "イ. 自分の考えを裏付けるため、全体の半分以上を出典の引用に費やした。", "ウ. レポート枚数が多くなったので、引用文献の出典を省略した。", "エ. 文章や図、表など引用したものの出典をすべて明記した。"], ans: 3, exp: "レポート作成において他人の著作物を引用する際は、主従関係を守り、出典（著者名、文献名、発行年等）を明記することがルールです。" },
+            { id: 71, cat: "セキュリティ・パスワード", q: "71. 安全なパスワードの管理方法として、最も適切なものを一つ選びなさい。", options: ["ア. 生年月日や電話番号など覚えやすい文字にする。", "イ. 複数のWebサービスで同じパスワードを使い回す。", "ウ. 英大文字・小文字・数字・記号を組み合わせた長めの文字列にする。", "エ. 付箋に書いてパソコンの画面に貼っておく。"], ans: 2, exp: "パスワードは英大文字・小文字・数字・記号を交ぜた8文字（できれば12文字以上）の複雑で長い文字列にし、使い回さないことが基本です。" },
+            { id: 72, cat: "通信・Wi-Fi", q: "72. 公共のフリーWi-Fiを利用する際の注意点として、最も適切なものを一つ選びなさい。", options: ["ア. 暗号化されていないWi-Fiでもクレジット決済を行ってよい。", "イ. 暗号化設定（WPA2/WPA3等）が施された信頼できるアクセスポイントを選ぶ。", "ウ. 自動接続機能を常にオンにして街中のフリーWi-Fiに自動接続させる。", "エ. どのアクセスポイントもセキュリティレベルは同じである。"], ans: 1, exp: "フリーWi-Fiの中には盗聴目的の悪意あるアクセスポイントが存在するため、暗号化設定やVPNの利用が必要です。" },
+            { id: 73, cat: "マルウェア", q: "73. ランサムウェア（Ransomware）の主な特徴として、最も適切なものを一つ選びなさい。", options: ["ア. コンピュータの画面をロックしたりファイルを暗号化して復元と引き換えに金銭を要求する。", "イ. 画面上に大量の広告を次々と表示させる。", "ウ. バックグラウンドでキー入力履歴を外部へ送信する。", "エ. パソコンのCPUファンを強制停止させて物理破壊する。"], ans: 0, exp: "ランサム（Ransom＝身代金）ウェアはデータを暗号化等で盾にとり、金銭を要求する悪意あるプログラムです。" },
+            { id: 74, cat: "ソーシャルエンジニアリング", q: "74. ソーシャルエンジニアリングに該当する行為として、最も適切なものを一つ選びなさい。", options: ["ア. 画面の盗み見（ショルダーハッキング）やゴミ箱からパスワードのメモを探す行為。", "イ. サーバに大量のデータを送って停止させる攻撃。", "ウ. Webサイトの脆弱性を突いてデータベースを不正操作する行為。", "エ. コンピュータに不正なプログラムを感染させる行為。"], ans: 0, exp: "人間の心理的隙や物理的な行動（盗み見、ゴミ漁り、なりすまし電話など）を利用して情報を盗み出す手法をソーシャルエンジニアリングと呼びます。" },
+            { id: 75, cat: "二要素認証", q: "75. 二要素認証（2FA）の説明として、最も適切なものを一つ選びなさい。", options: ["ア. パスワードを2回続けて入力させる認証方式。", "イ. 知識・所持・生体情報のうち、異なる2つの要素を組み合わせて認証する方式。", "ウ. 2種類の異なるIDを使い分けてログインする方式。", "エ. 2人の管理者が同時に承認ボタンを押す認証方式。"], ans: 1, exp: "二要素認証（知識情報・所持情報・生体情報の中から2つを選択）によりセキュリティ強度が飛躍的に向上します。" },
+            { id: 76, cat: "情報セキュリティ基本方針", q: "76. 情報セキュリティの「CIA（3要素）」に含まれないものを一つ選びなさい。", options: ["ア. 機密性 (Confidentiality)", "イ. 完全性 (Integrity)", "ウ. 可用性 (Availability)", "エ. 迅速性 (Agility)"], ans: 3, exp: "情報セキュリティの3大要素は「機密性」「完全性」「可用性」です。" },
+            { id: 77, cat: "ネットワーク", q: "77. ファイアウォール（Firewall）の主な機能として、最も適切なものを一つ選びなさい。", options: ["ア. ネットワークの通信を監視し、不正なアクセスを遮断する。", "イ. パソコンのハードディスクの温度上昇を防ぐ。", "ウ. 迷惑メールを自動的にゴミ箱へ移動する。", "エ. Webページの表示速度を高速化する。"], ans: 0, exp: "ファイアウォールは外部ネットワークとの境界に設置され、定められたルールに基づき不正な通信をブロックします。" },
+            { id: 78, cat: "スパイウェア", q: "78. スパイウェアの侵入防止対策として、最も適切なものを一つ選びなさい。", options: ["ア. 企業が提供している無料のアプリをダウンロードして使う。", "イ. ブラウザのセキュリティレベルを「低」にしておく。", "ウ. OSやブラウザのアップデートはあまり行わない。", "エ. 有料のスパイウェア対策ソフトウェアを使う。"], ans: 3, exp: "信頼性の高いセキュリティベンダーが提供する対策ソフトウェアを導入し、定期的なスキャンやリアルタイム保護を行うことが適切です。" },
+            { id: 79, cat: "ウイルス対策", q: "79. コンピュータウイルスに関する説明のうち、最も適切なものを一つ選びなさい。", options: ["ア. ウイルス対策ソフトウェアを入れておけば、コンピュータウイルスは入ってこない。", "イ. ダウンロードしたファイルは使用する前にウイルス検査をする。", "ウ. メーラやブラウザのセキュリティレベルは下げておく。", "エ. 知らない人からのメールはウイルスかもしれないので開いて内容を確認する。"], ans: 1, exp: "外部から入手したファイルや添付ファイルは、実行・閲覧前にウイルススキャンを実施するのが最も安全です。" },
+            { id: 80, cat: "データ消去", q: "80. USBメモリに入っているデータを完全に消去する方法のうち、最も適切なものを一つ選びなさい。", options: ["ア. データを「ごみ箱」にドラッグして削除する。", "イ. ファイルのアイコン上で右クリックして削除する。", "ウ. 専用のソフトウェアを使って乱数のデータなどを上書きする。", "エ. フォーマットする。"], ans: 2, exp: "通常の削除やクイックフォーマットでは管理領域が消えるだけでデータ自体は復元可能です。専用ソフトによるデータの乱数上書きが安全です。" }
+        ];
+
+        // STATE MANAGEMENT
+        let currentQuizIndex = 0;
+        let userAnswers = {}; // { qIndex: selectedOptIndex }
+        let bookmarkedQ = new Set();
+        let viewFilter = 'all';
+        let isSingleView = true;
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSingleQuestion();
+            renderQuestionGrid();
+            updateHeaderStats();
+        });
+
+        // TAB NAVIGATION
+        function switchTab(tabName) {
+            ['home', 'quiz', 'list', 'analytics'].forEach(t => {
+                const section = document.getElementById(`tab-${t}`);
+                const nav = document.getElementById(`nav-${t}`);
+                const mobileNav = document.getElementById(`mobile-nav-${t}`);
+
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    if (nav) {
+                        nav.className = "nav-tab px-4 py-2 rounded-lg text-sm font-semibold text-blue-600 bg-blue-50 flex items-center transition";
+                    }
+                    if (mobileNav) {
+                        mobileNav.className = "flex flex-col items-center text-xs font-bold text-blue-600";
+                    }
+                } else {
+                    section.classList.add('hidden');
+                    if (nav) {
+                        nav.className = "nav-tab px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center transition";
+                    }
+                    if (mobileNav) {
+                        mobileNav.className = "flex flex-col items-center text-xs font-medium text-slate-500";
+                    }
+                }
+            });
+
+            if (tabName === 'analytics') {
+                renderAnalytics();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function startQuizMode(mode) {
+            switchTab('quiz');
+            if (mode === 'single') {
+                setQuizViewMode('single');
+            } else {
+                setQuizViewMode('all');
+            }
+        }
+
+        // QUIZ DISPLAY SWITCHER
+        function setQuizViewMode(mode) {
+            isSingleView = (mode === 'single');
+            const singleContainer = document.getElementById('single-question-view');
+            const allContainer = document.getElementById('all-questions-view');
+            const singleBtn = document.getElementById('view-mode-single-btn');
+            const allBtn = document.getElementById('view-mode-all-btn');
+            const badge = document.getElementById('quiz-mode-badge');
+
+            if (isSingleView) {
+                singleContainer.classList.remove('hidden');
+                allContainer.classList.add('hidden');
+                singleBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white transition";
+                allBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+                badge.innerText = "1問スライドモード";
+                renderSingleQuestion();
+            } else {
+                singleContainer.classList.add('hidden');
+                allContainer.classList.remove('hidden');
+                allBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white transition";
+                singleBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+                badge.innerText = "全問一括モード";
+                renderAllQuestionsList();
+            }
+        }
+
+        function renderSingleQuestion() {
+            const data = quizData[currentQuizIndex];
+            document.getElementById('current-index-display').innerText = currentQuizIndex + 1;
+            document.getElementById('total-quiz-count').innerText = quizData.length;
+            
+            // Progress Bar
+            const progPercent = ((currentQuizIndex + 1) / quizData.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${progPercent}%`;
+
+            // Title & Category
+            document.getElementById('q-category').innerText = data.cat;
+            document.getElementById('q-title').innerText = data.q;
+
+            // Bookmark Status
+            const bmBtn = document.getElementById('q-bookmark-btn');
+            if (bookmarkedQ.has(currentQuizIndex)) {
+                bmBtn.className = "text-amber-500 hover:text-amber-600 transition text-xl p-2";
+            } else {
+                bmBtn.className = "text-slate-300 hover:text-amber-500 transition text-xl p-2";
+            }
+
+            // Options Container
+            const optContainer = document.getElementById('q-options-container');
+            optContainer.innerHTML = '';
+
+            const selectedOption = userAnswers[currentQuizIndex];
+
+            data.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border transition flex items-center justify-between ";
+
+                if (selectedOption === undefined) {
+                    btn.className += "border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 bg-white text-slate-700";
+                } else if (selectedOption === idx) {
+                    if (idx === data.ans) {
+                        btn.className += "border-emerald-500 bg-emerald-50 text-emerald-900 font-medium shadow-sm";
+                    } else {
+                        btn.className += "border-rose-500 bg-rose-50 text-rose-900 font-medium shadow-sm";
+                    }
+                } else {
+                    if (selectedOption !== undefined && idx === data.ans) {
+                        btn.className += "border-emerald-500 bg-emerald-50/60 text-emerald-900 font-medium";
+                    } else {
+                        btn.className += "border-slate-100 bg-slate-50 text-slate-400 opacity-60";
+                    }
+                }
+
+                btn.onclick = () => selectAnswer(currentQuizIndex, idx);
+
+                let badgeHtml = '';
+                if (selectedOption !== undefined) {
+                    if (idx === data.ans) {
+                        badgeHtml = '<span class="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-500 text-white ml-2"><i class="fa-solid fa-check mr-1"></i>正解</span>';
+                    } else if (selectedOption === idx) {
+                        badgeHtml = '<span class="text-xs font-bold px-2.5 py-1 rounded-md bg-rose-500 text-white ml-2"><i class="fa-solid fa-xmark mr-1"></i>不正解</span>';
+                    }
+                }
+
+                btn.innerHTML = `
+                    <span class="text-sm sm:text-base leading-snug">${opt}</span>
+                    ${badgeHtml}
+                `;
+                optContainer.appendChild(btn);
+            });
+
+            // Explanation Display
+            const expDiv = document.getElementById('q-explanation');
+            if (selectedOption !== undefined) {
+                expDiv.classList.remove('hidden');
+                document.getElementById('q-explanation-text').innerText = data.exp;
+            } else {
+                expDiv.classList.add('hidden');
+            }
+
+            // Prev / Next button status
+            document.getElementById('prev-q-btn').disabled = (currentQuizIndex === 0);
+            const nextBtn = document.getElementById('next-q-btn');
+            if (currentQuizIndex === quizData.length - 1) {
+                nextBtn.innerHTML = '結果画面へ <i class="fa-solid fa-chart-pie ml-2 text-xs"></i>';
+                nextBtn.onclick = () => switchTab('analytics');
+            } else {
+                nextBtn.innerHTML = '次へ <i class="fa-solid fa-chevron-right ml-2 text-xs"></i>';
+                nextBtn.onclick = () => navigateQuiz(1);
+            }
+        }
+
+        function selectAnswer(qIndex, optIdx) {
+            userAnswers[qIndex] = optIdx;
+            updateHeaderStats();
+            if (isSingleView) {
+                renderSingleQuestion();
+            } else {
+                renderAllQuestionsList();
+            }
+        }
+
+        function navigateQuiz(dir) {
+            currentQuizIndex += dir;
+            if (currentQuizIndex < 0) currentQuizIndex = 0;
+            if (currentQuizIndex >= quizData.length) currentQuizIndex = quizData.length - 1;
+            renderSingleQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleBookmarkCurrent() {
+            if (bookmarkedQ.has(currentQuizIndex)) {
+                bookmarkedQ.delete(currentQuizIndex);
+            } else {
+                bookmarkedQ.add(currentQuizIndex);
+            }
+            updateHeaderStats();
+            renderSingleQuestion();
+        }
+
+        function renderAllQuestionsList() {
+            const container = document.getElementById('all-questions-container');
+            container.innerHTML = '';
+
+            quizData.forEach((data, qIdx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl border border-slate-200 p-5 shadow-sm";
+
+                const selectedOption = userAnswers[qIdx];
+
+                let optionsHtml = '';
+                data.options.forEach((opt, optIdx) => {
+                    let optStyle = "border-slate-200 hover:border-blue-300 bg-white text-slate-700";
+                    let badge = '';
+
+                    if (selectedOption !== undefined) {
+                        if (optIdx === data.ans) {
+                            optStyle = "border-emerald-500 bg-emerald-50 text-emerald-900 font-medium";
+                            badge = '<span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500 text-white ml-2">正解</span>';
+                        } else if (selectedOption === optIdx) {
+                            optStyle = "border-rose-500 bg-rose-50 text-rose-900 font-medium";
+                            badge = '<span class="text-xs font-bold px-2 py-0.5 rounded bg-rose-500 text-white ml-2">選択</span>';
+                        } else {
+                            optStyle = "border-slate-100 bg-slate-50 text-slate-400 opacity-60";
+                        }
+                    }
+
+                    optionsHtml += `
+                        <button onclick="selectAnswer(${qIdx}, ${optIdx})" class="w-full text-left p-3 rounded-lg border text-xs sm:text-sm transition flex justify-between items-center mb-2 ${optStyle}">
+                            <span>${opt}</span>
+                            ${badge}
+                        </button>
+                    `;
+                });
+
+                let expHtml = '';
+                if (selectedOption !== undefined) {
+                    expHtml = `
+                        <div class="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600">
+                            <strong class="text-slate-800">解説:</strong> ${data.exp}
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold px-2 py-1 bg-slate-100 text-slate-600 rounded">${data.cat}</span>
+                        <button onclick="toggleBookmarkIndex(${qIdx})" class="${bookmarkedQ.has(qIdx) ? 'text-amber-500' : 'text-slate-300'} text-base">
+                            <i class="fa-solid fa-bookmark"></i>
+                        </button>
+                    </div>
+                    <h4 class="text-sm sm:text-base font-bold text-slate-900 mb-3">${data.q}</h4>
+                    <div>${optionsHtml}</div>
+                    ${expHtml}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleBookmarkIndex(idx) {
+            if (bookmarkedQ.has(idx)) {
+                bookmarkedQ.delete(idx);
+            } else {
+                bookmarkedQ.add(idx);
+            }
+            updateHeaderStats();
+            renderAllQuestionsList();
+        }
+
+        function finishQuiz() {
+            switchTab('analytics');
+        }
+
+        function filterQuestionList(filter) {
+            viewFilter = filter;
+            ['all', 'unanswered', 'bookmarked'].forEach(f => {
+                const btn = document.getElementById(`filter-${f}`);
+                if (f === filter) {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200";
+                }
+            });
+            renderQuestionGrid();
+        }
+
+        function renderQuestionGrid() {
+            const grid = document.getElementById('question-grid-list');
+            grid.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const isAnswered = userAnswers[idx] !== undefined;
+                const isBookmarked = bookmarkedQ.has(idx);
+
+                if (viewFilter === 'unanswered' && isAnswered) return;
+                if (viewFilter === 'bookmarked' && !isBookmarked) return;
+
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 hover:bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm transition cursor-pointer flex flex-col justify-between";
+                card.onclick = () => {
+                    currentQuizIndex = idx;
+                    startQuizMode('single');
+                };
+
+                let statusBadge = '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-600">未解答</span>';
+                if (isAnswered) {
+                    const isCorrect = userAnswers[idx] === q.ans;
+                    if (isCorrect) {
+                        statusBadge = '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700">正解</span>';
+                    } else {
+                        statusBadge = '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-700">不正解</span>';
+                    }
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-slate-400">問 ${idx + 1}</span>
+                            ${statusBadge}
+                        </div>
+                        <p class="text-xs font-semibold text-slate-800 line-clamp-2 mb-2">${q.q}</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-200/60 text-[10px] text-slate-400">
+                        <span>${q.cat}</span>
+                        ${isBookmarked ? '<i class="fa-solid fa-bookmark text-amber-500"></i>' : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderAnalytics() {
+            let correctCount = 0;
+            let answeredCount = 0;
+
+            quizData.forEach((q, idx) => {
+                if (userAnswers[idx] !== undefined) {
+                    answeredCount++;
+                    if (userAnswers[idx] === q.ans) {
+                        correctCount++;
+                    }
+                }
+            });
+
+            const accuracy = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+            const progress = Math.round((answeredCount / quizData.length) * 100);
+
+            document.getElementById('stat-score').innerText = correctCount;
+            document.getElementById('stat-accuracy').innerText = `${accuracy}%`;
+            document.getElementById('stat-progress').innerText = `${progress}%`;
+
+            // Rank Badge
+            const rankBadge = document.getElementById('result-rank-badge');
+            if (accuracy >= 90 && answeredCount >= 40) {
+                rankBadge.innerText = 'S';
+            } else if (accuracy >= 80) {
+                rankBadge.innerText = 'A';
+            } else if (accuracy >= 65) {
+                rankBadge.innerText = 'B';
+            } else if (accuracy >= 50) {
+                rankBadge.innerText = 'C';
+            } else {
+                rankBadge.innerText = 'D';
+            }
+
+            // Summary List
+            const summaryContainer = document.getElementById('analytics-summary-list');
+            summaryContainer.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const isAnswered = userAnswers[idx] !== undefined;
+                const isCorrect = isAnswered && (userAnswers[idx] === q.ans);
+
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-2.5 rounded-lg border text-xs bg-white border-slate-200";
+
+                let statusIcon = '<i class="fa-solid fa-minus text-slate-300"></i>';
+                if (isAnswered) {
+                    statusIcon = isCorrect ? '<i class="fa-solid fa-circle-check text-emerald-500"></i>' : '<i class="fa-solid fa-circle-xmark text-rose-500"></i>';
+                }
+
+                item.innerHTML = `
+                    <div class="flex items-center space-x-2 truncate pr-2">
+                        ${statusIcon}
+                        <span class="font-bold text-slate-700 w-12 shrink-0">問 ${idx + 1}</span>
+                        <span class="text-slate-600 truncate">${q.q}</span>
+                    </div>
+                    <button onclick="jumpToQuestion(${idx})" class="text-blue-600 hover:underline font-semibold shrink-0 text-[11px]">確認</button>
+                `;
+                summaryContainer.appendChild(item);
+            });
+        }
+
+        function jumpToQuestion(idx) {
+            currentQuizIndex = idx;
+            startQuizMode('single');
+        }
+
+        function updateHeaderStats() {
+            const answeredCount = Object.keys(userAnswers).length;
+            document.getElementById('header-answered').innerText = answeredCount;
+            document.getElementById('header-bookmarked').innerText = bookmarkedQ.size;
+        }
+    </script>
+</body>
+</html>
